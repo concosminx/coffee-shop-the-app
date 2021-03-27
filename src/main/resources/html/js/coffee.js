@@ -12,17 +12,30 @@ coffeeApp.factory('CoffeeOrder', function ($resource) {
     );
 });
 
-coffeeApp.controller('CoffeeShopController', function ($scope, $window, CoffeeShopLocator) {
+coffeeApp.service('LocalCoffeeShop', function () {
+    var localCoffeeShop;
+    return {
+        setShop: function (shop) {
+            localCoffeeShop = shop;
+        },
+        getShop: function () {
+            return localCoffeeShop;
+        }
+    };
+});
+
+coffeeApp.controller('CoffeeShopController', function ($scope, $window, CoffeeShopLocator, LocalCoffeeShop) {
     $scope.findCoffeeShopNearestToMe = function () {
         window.navigator.geolocation.getCurrentPosition(function (position) {
             CoffeeShopLocator.get({latitude: position.coords.latitude, longitude: position.coords.longitude}).$promise
                 .then(
                 function (value) {
                     $scope.nearestCoffeeShop = value;
+                    LocalCoffeeShop.setShop($scope.nearestCoffeeShop);
                 })
                 .catch(
                 function (value) {
-                    //default coffee shop
+                    //default coffee shop ??
                     $scope.getCoffeeShopAt(51.4994678, -0.128888);
                 });
         });
@@ -30,7 +43,7 @@ coffeeApp.controller('CoffeeShopController', function ($scope, $window, CoffeeSh
     $scope.findCoffeeShopNearestToMe();
 });
 
-coffeeApp.controller('DrinksController', function ($scope, $filter, CoffeeOrder) {
+coffeeApp.controller('DrinksController', function ($scope, $filter, CoffeeOrder, LocalCoffeeShop) {
     //this could come from the coffee shop itself
     $scope.types = [
         {name: 'Americano', family: 'Coffee'},
@@ -73,7 +86,7 @@ coffeeApp.controller('DrinksController', function ($scope, $filter, CoffeeOrder)
         if (selectedShop == null) {
             $scope.messages.push({type: 'danger', msg: 'You need to find your local coffee shop before you can submit an order'});
         } else {
-            $scope.coffeeShopId = selectedShop.allValues.openStreetMapId;
+            $scope.coffeeShopId = selectedShop.openStreetMapId;
             CoffeeOrder.save({ id: $scope.coffeeShopId}, $scope.drink,
                 function (result) {
                     $scope.messages.push({type: 'success', msg: 'Order sent!', orderId: result.id});

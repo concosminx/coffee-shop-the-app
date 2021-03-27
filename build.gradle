@@ -1,33 +1,54 @@
 apply plugin: 'java'
 apply plugin: 'groovy'
+apply plugin: 'application'
+
+mainClassName = 'com.mechanitis.demo.coffee.CoffeeShopService'
 
 sourceCompatibility = 1.8
 version = '1.0'
 
 repositories {
-    maven { url "http://localhost:8088/artifactory/repo1" }
+  mavenCentral()
 }
 
 dependencies {
-    compile 'com.yammer.dropwizard:dropwizard-core:0.6.2'
-    compile 'org.mongodb.morphia:morphia:0.108'
+  compile 'com.yammer.dropwizard:dropwizard-core:0.6.2'
+  compile 'org.mongodb.morphia:morphia:0.108'
+  
+  //see https://stackoverflow.com/questions/48204141/replacements-for-deprecated-jpms-modules-with-java-ee-apis
+  compile group: 'jakarta.xml.ws', name: 'jakarta.xml.ws-api', version: '2.3.3'
+  compile group: 'com.sun.xml.ws', name: 'jaxws-rt', version: '2.3.3'
+  compile 'org.codehaus.groovy:groovy-all:2.3.4'
 
-    testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
-    testCompile 'cglib:cglib-nodep:3.1'
-    testCompile 'org.objenesis:objenesis:2.1'
-    testCompile 'org.codehaus.groovy:groovy-all:2.3.4'
+  testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
+  testCompile 'cglib:cglib-nodep:3.1'
+  testCompile 'org.objenesis:objenesis:2.1'
 }
 
 jar {
-    manifest {
-        attributes('Implementation-Title': 'Coffeeeee',
+  manifest {
+    attributes('Implementation-Title': 'Coffeeeee',
                    'Implementation-Version': 0.1,
                    'Main-Class': 'com.mechanitis.demo.coffee.CoffeeShopService')
-    }
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
+  }
+  from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+  exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.0'
+/*add properties for run task*/
+run {
+  args 'server', "$rootProject.projectDir" + '/coffee.yaml'
+}
+
+sourceSets {
+  main {
+    groovy {
+      srcDirs = ['src/scripts']
+    }
+  }
+}
+
+task populateMongo(type: JavaExec) {
+  classpath = sourceSets.main.runtimeClasspath
+  main = 'PopulateDatabase'
 }
