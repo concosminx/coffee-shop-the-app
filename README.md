@@ -19,8 +19,8 @@ Test the app
 How to obtain OpenStreetMap testing data
 ----------------------------------------
 
-- search the POI using [openstreetmap]([https://link](https://www.openstreetmap.org))
-- use [overpass-turbo]([https://link](https://overpass-turbo.eu/)) to extract information from the OSM database
+- search the POI using [openstreetmap](https://www.openstreetmap.org)
+- use [overpass-turbo](https://overpass-turbo.eu/) to extract information from the OSM database
 
 ```
 /*
