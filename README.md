@@ -38,6 +38,6 @@ out center;
 More info:
 ----------
 
-- [https://wiki.openstreetmap.org/wiki/Overpass_turbo/Wizard]([https://link](https://wiki.openstreetmap.org/wiki/Overpass_turbo/Wizard))
-- [https://wiki.openstreetmap.org/wiki/Key:amenity]([https://link](https://wiki.openstreetmap.org/wiki/Key:amenity))
-- [https://dev.overpass-api.de/overpass-doc/en/criteria/per_tag.html#local]([https://link](https://dev.overpass-api.de/overpass-doc/en/criteria/per_tag.html#local))
+- [https://wiki.openstreetmap.org/wiki/Overpass_turbo/Wizard](https://wiki.openstreetmap.org/wiki/Overpass_turbo/Wizard)
+- [https://wiki.openstreetmap.org/wiki/Key:amenity](https://wiki.openstreetmap.org/wiki/Key:amenity)
+- [https://dev.overpass-api.de/overpass-doc/en/criteria/per_tag.html#local](https://dev.overpass-api.de/overpass-doc/en/criteria/per_tag.html#local)
